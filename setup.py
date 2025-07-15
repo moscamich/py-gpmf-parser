@@ -3,7 +3,7 @@ from pybind11.setup_helpers import Pybind11Extension, build_ext
 import sys
 
 class CustomBuildExt(build_ext):
-    """Custom build_ext to add platform-specific compiler flags."""
+    """Add only C++ flags to C++ files, not C files."""
     def build_extensions(self):
         cpp_flags = ["-std=c++17"]
         link_flags = []
@@ -11,12 +11,13 @@ class CustomBuildExt(build_ext):
             cpp_flags += ["-mmacosx-version-min=11.0"]
             link_flags += ["-stdlib=libc++", "-mmacosx-version-min=11.0"]
 
+        # Only set C++ flags if the compiler is for C++
         for ext in self.extensions:
-            # Use dict to avoid passing C++ flags to C sources!
-            ext.extra_compile_args = {
-                "cxx": cpp_flags,
-                "c":   [],
-            }
+            # Only apply flags to C++ source files
+            # Filter sources ending with .cpp for C++ flags
+            if hasattr(ext, "sources"):
+                # You can't set per-file flags, so...
+                ext.extra_compile_args = cpp_flags
             ext.extra_link_args = link_flags
         super().build_extensions()
 
