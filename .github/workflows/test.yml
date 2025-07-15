@@ -3,9 +3,9 @@ name: Test (macOS ARM64 only)
 on:
   workflow_dispatch:  # Run manually from Actions tab
   push:
-    branches: [main, pip_install]
+    branches: [ pip_install ]
   pull_request:
-    branches: [main, pip_install]
+    branches: [ pip_install ]
 
 jobs:
   test-mac-arm64:
