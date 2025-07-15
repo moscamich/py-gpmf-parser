@@ -1,4 +1,4 @@
-name: Build and Test
+name: Build and Test (Ubuntu only)
 
 on:
   push:
@@ -8,10 +8,9 @@ on:
 
 jobs:
   test:
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-latest]
         python-version: ["3.10", "3.11", "3.12"]
     steps:
       - name: Checkout repo and submodules (recursive)
@@ -45,7 +44,5 @@ jobs:
         run: |
           python -c "from py_gpmf_parser.gopro_telemetry_extractor import GoProTelemetryExtractor"
 
-      # (Optional) If you have tests in a tests/ folder:
-      # - name: Run unittests
-      #   run: python -m unittest discover -v tests
-
+      - name: List gpmf-parser contents (debug)
+        run: ls -l gpmf-parser/
