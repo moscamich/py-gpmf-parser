@@ -12,7 +12,11 @@ class CustomBuildExt(build_ext):
             link_flags += ["-stdlib=libc++", "-mmacosx-version-min=11.0"]
 
         for ext in self.extensions:
-            ext.extra_compile_args = cpp_flags
+            # Use dict to avoid passing C++ flags to C sources!
+            ext.extra_compile_args = {
+                "cxx": cpp_flags,
+                "c":   [],
+            }
             ext.extra_link_args = link_flags
         super().build_extensions()
 
@@ -39,7 +43,5 @@ setup(
     cmdclass={"build_ext": CustomBuildExt},
     packages=["py_gpmf_parser"],
     package_dir={"py_gpmf_parser": "py_gpmf_parser"},
-    # Metadata (version, etc.) comes from pyproject.toml
     zip_safe=False,
 )
-
