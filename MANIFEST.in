@@ -1,0 +1,3 @@
+recursive-include gpmf-parser *.h
+recursive-include gpmf-parser *.c
+recursive-include gpmf-parser *.cpp
